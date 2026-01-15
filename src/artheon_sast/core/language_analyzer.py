@@ -7,20 +7,7 @@ import os
 from pathlib import Path
 from typing import Dict, List, Set
 
-# Mapeo de extensiones a lenguajes
-LANGUAGE_EXTENSIONS = {
-    'javascript': {'.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'},
-    'python': {'.py', '.pyw', '.pyi'},
-    'php': {'.php', '.php3', '.php4', '.php5', '.php7', '.php8', '.phtml', '.phps'},
-    'java': {'.java'},
-}
-
-# Directorios a ignorar
-IGNORE_DIRS = {
-    '.git', '.gitignore', 'node_modules', 'venv', '__pycache__',
-    '.idea', '.vscode', 'dist', 'build', 'target', '.gradle',
-    '.pytest_cache', '.tox', 'vendor', 'coverage', '.egg-info'
-}
+from ..config import LANGUAGE_EXTENSIONS, IGNORE_DIRS
 
 
 class LanguageAnalyzer:
@@ -53,16 +40,7 @@ class LanguageAnalyzer:
             {
                 'directory': '/ruta/analizada',
                 'languages_detected': ['javascript', 'python'],
-                'language_details': {
-                    'javascript': {
-                        'files': 5,
-                        'extensions': ['.js', '.ts']
-                    },
-                    'python': {
-                        'files': 3,
-                        'extensions': ['.py']
-                    }
-                },
+                'language_details': {...},
                 'total_files': 8,
                 'supported': True
             }

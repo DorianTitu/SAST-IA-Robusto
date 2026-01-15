@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
   artheon-backend:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     container_name: artheon-sast-backend
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
     volumes:
-      # Permitir que el contenedor acceda a volúmenes del host
       - /:/host:ro
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn src.artheon_sast.api.main:app --host 0.0.0.0 --port 8000 --reload
 
-# Volúmenes nombrados (opcional)
 volumes:
   app_data:

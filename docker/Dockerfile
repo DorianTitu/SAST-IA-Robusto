@@ -4,7 +4,7 @@ FROM python:3.11-slim
 # Establecer directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Instalar dependencias del sistema (si es necesario)
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando para ejecutar la aplicación
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.artheon_sast.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

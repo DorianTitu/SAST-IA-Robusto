@@ -1,99 +1,226 @@
-# 🛡️ ARTHEON-SAST: Static Application Security Testing
+# ARTHEON SAST - Static Application Security Testing with Google Gemini
 
-Sistema robusto de análisis estático de seguridad con integración de **Google Gemini API** para recomendaciones automáticas de correcciones.
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green)
+![Docker](https://img.shields.io/badge/Docker-Supported-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## 📋 Contenido del Proyecto
+A robust Static Application Security Testing (SAST) tool powered by Google Gemini that automatically detects vulnerabilities and provides actionable security recommendations.
 
-```
-SAST-rOBUSTO/
-├── artheon_backend/              # Backend FastAPI con Docker
-│   ├── main.py                   # Aplicación principal
-│   ├── language_analyzer.py      # Análisis de lenguajes
-│   ├── requirements.txt          # Dependencias Python
-│   ├── Dockerfile                # Configuración Docker
-│   ├── docker-compose.yml        # Composición de servicios
-│   ├── README.md                 # Documentación del backend
-│   └── QUICKSTART.md             # Guía rápida
-├── IMPLEMENTATION_PLAN.md        # Plan de implementación
-└── README.md                     # Este archivo
+## 🎯 Features
 
-```
+- **Multi-Language Detection**: Automatically detects JavaScript, Python, PHP, and Java
+- **Vulnerability Scanning**: Identifies security issues using pattern-based rules
+- **AI-Powered Recommendations**: Leverages Google Gemini 2.0 Flash for intelligent recommendations
+- **RESTful API**: Built with FastAPI for easy integration
+- **Docker Support**: Container-ready deployment
+- **Scalable Architecture**: Professional layered structure for easy extension
+
+## 📋 Supported Languages
+
+- **JavaScript/TypeScript** - Detects .js, .ts, .jsx, .tsx files
+- **Python** - Detects .py files
+- **PHP** - Detects .php files
+- **Java** - Detects .java files
 
 ## 🚀 Quick Start
 
-### Opción 1: Con Docker Compose (Recomendado)
+### Prerequisites
+
+- Docker and Docker Compose (recommended)
+- OR Python 3.8+
+- Google Gemini API Key
+
+### Installation
+
+#### Using Docker (Recommended)
 
 ```bash
-cd artheon_backend
-docker-compose up -d
+cd docker
+docker-compose up --build
 ```
 
-Luego accede a:
-- **API:** http://localhost:8000
-- **Documentación:** http://localhost:8000/docs
+The API will be available at `http://localhost:8000`
 
-### Opción 2: Local sin Docker
+#### Local Installation
 
 ```bash
-cd artheon_backend
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload
+# Clone repository
+git clone https://github.com/DorianTitu/SAST-IA-Robusto.git
+cd SAST-IA-Robusto
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -e .
+
+# Set up environment
+cp .env.example .env
+# Edit .env and add your GEMINI_API_KEY
+
+# Run server
+python -m uvicorn src.artheon_sast.api.main:app --reload
 ```
 
 ## 📡 API Endpoints
 
-### 1. Health Check
+### Health Check
 ```bash
-curl http://localhost:8000/health
+GET /health
 ```
 
-### 2. Detectar Lenguajes
+### Analyze Directory
 ```bash
-curl -X POST http://localhost:8000/analyze \
-  -H "Content-Type: application/json" \
-  -d '{"directory": "/app/proyecto"}'
-```
+POST /api/v1/analyze
+Content-Type: application/json
 
-**Respuesta:**
-```json
 {
-    "languages_detected": ["javascript", "python", "java", "php"],
-    "language_details": {
-        "javascript": {"files": 15, "extensions": [".js", ".ts"]},
-        "python": {"files": 8, "extensions": [".py"]}
-    },
-    "total_files": 23,
-    "supported": true
+  "directory_path": "/path/to/analyze"
 }
 ```
 
-### 3. Listar Archivos
-```bash
-curl -X POST http://localhost:8000/analyze-files \
-  -H "Content-Type: application/json" \
-  -d '{"directory": "/app/proyecto"}'
+**Response**:
+```json
+{
+  "directory": "/path/to/analyze",
+  "languages_detected": {
+    "javascript": 5,
+    "python": 3,
+    "java": 2,
+    "php": 0
+  },
+  "total_files": 10,
+  "analysis_timestamp": "2024-01-20T10:30:00Z"
+}
 ```
 
-## ✨ Características Actuales
+### Analyze Files by Language
+```bash
+POST /api/v1/analyze-files
+Content-Type: application/json
 
-✅ **FastAPI Backend en Docker**
-- Servidor REST con documentación automática
-- Validación de datos con Pydantic
-- CORS habilitado
+{
+  "directory_path": "/path/to/analyze",
+  "language": "javascript"
+}
+```
 
-✅ **Análisis de Lenguajes**
-- Detecta: JavaScript, Python, PHP, Java
-- Mapeo automático de extensiones
-- Ignorancia de directorios comunes (`node_modules`, `venv`, etc.)
+## 🏗️ Architecture
 
-✅ **Endpoints Funcionales**
-- `/health` - Verificación de estado
-- `/analyze` - Análisis de lenguajes en directorio
-- `/analyze-files` - Listado de archivos por lenguaje
+```
+src/artheon_sast/
+├── api/                    # FastAPI endpoints
+│   ├── main.py
+│   └── routes.py
+├── core/                   # Core domain logic
+│   └── language_analyzer.py
+├── services/               # Business logic layer
+│   └── language_service.py
+├── models/                 # Pydantic schemas
+│   └── schemas.py
+├── rules/                  # Security rules (future)
+├── utils/                  # Helper functions
+└── config.py              # Centralized configuration
+```
 
-## 🔄 Próximas Fases
+## 🔧 Configuration
+
+Edit `src/artheon_sast/config.py` for:
+- Language extensions
+- Ignore directories
+- Google Gemini model selection
+- API settings
+
+Or use environment variables via `.env` file.
+
+## 📖 Documentation
+
+- [Architecture Guide](docs/ARCHITECTURE.md) - Detailed system design
+- [API Documentation](http://localhost:8000/docs) - Interactive Swagger UI (when running)
+- [ReDoc Documentation](http://localhost:8000/redoc) - Alternative API docs
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src
+
+# Run specific test
+pytest tests/test_language_analyzer.py
+```
+
+## 📦 Installation from PyPI (Future)
+
+```bash
+pip install artheon-sast
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 Roadmap
+
+### Phase 2: Enhanced SAST
+- [ ] Complete vulnerability rule sets for all languages
+- [ ] Security pattern database
+- [ ] Severity classification
+
+### Phase 3: Gemini Integration
+- [ ] Automatic vulnerability recommendations
+- [ ] Code review suggestions
+- [ ] Risk assessment
+
+### Phase 4: Persistence
+- [ ] MongoDB integration
+- [ ] Historical scanning
+- [ ] Trend analysis
+
+### Phase 5: Reporting
+- [ ] HTML report generation
+- [ ] PDF exports
+- [ ] Executive summaries
+
+## 🔐 Security Notes
+
+- Never commit `.env` file with real API keys
+- Use `.env.example` as template
+- Rotate API keys regularly
+- Store API keys in secure environment variable management system
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## ✨ Acknowledgments
+
+- Google Gemini API for AI-powered security recommendations
+- FastAPI framework for building robust APIs
+- Docker for containerization support
+
+## 👨‍💻 Author
+
+Dorian Tituana  
+[GitHub](https://github.com/DorianTitu) | [Email](mailto:dorian.tituana@epn.edu.ec)
+
+## 📧 Support
+
+For issues, questions, or suggestions:
+- Open an issue on [GitHub Issues](https://github.com/DorianTitu/SAST-IA-Robusto/issues)
+- Check existing [documentation](docs/)
+
+## ✨ Próximas Fases
 
 ### FASE 2: Escaneo SAST Completo
 - [ ] Cargar reglas de vulnerabilidades
