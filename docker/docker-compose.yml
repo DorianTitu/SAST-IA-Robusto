@@ -3,7 +3,7 @@ version: '3.8'
 services:
   artheon-backend:
     build:
-      context: .
+      context: ../
       dockerfile: docker/Dockerfile
     container_name: artheon-sast-backend
     ports:

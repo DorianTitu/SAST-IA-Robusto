@@ -6,7 +6,11 @@ WORKDIR /app
 
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
+    git \
     && rm -rf /var/lib/apt/lists/*
+
+# Actualizar pip a la última versión
+RUN pip install --upgrade pip setuptools wheel
 
 # Copiar archivo de requisitos
 COPY requirements.txt .
