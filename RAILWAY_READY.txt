@@ -1,0 +1,105 @@
+ARTHEON SAST - RAILWAY READY
+=============================
+
+Tu proyecto está completamente listo para deployar en Railway.
+
+ESTRUCTURA RAILWAY
+==================
+
+Root del proyecto tiene:
+✓ Dockerfile (para Railway)
+✓ railway.json (configuración Railway)
+✓ .dockerignore (archivos a ignorar)
+✓ requirements.txt (dependencias Python)
+✓ src/artheon_sast/ (código de la app)
+
+PASOS PARA DEPLOYAR EN RAILWAY
+==============================
+
+1. Ir a railway.app
+2. Hacer login / registrarse
+3. Click "New Project"
+4. Seleccionar "Deploy from GitHub"
+5. Autorizar y seleccionar este repositorio
+6. Railway detectará el Dockerfile automáticamente
+7. Click "Deploy"
+8. Esperar a que termine la build
+
+CARACTERÍSTICAS IMPLEMENTADAS
+=============================
+
+✓ Puerto dinámico (usa $PORT de Railway)
+✓ Dockerfile optimizado en raíz
+✓ .dockerignore para builds rápidas
+✓ railway.json con configuración completa
+✓ Healthcheck endpoint en /health
+✓ Logging a stdout para Railway
+
+CÓMO FUNCIONA
+=============
+
+1. Railway detecta Dockerfile en raíz
+2. Construye imagen Docker
+3. Instala dependencias de requirements.txt
+4. Copia el código
+5. Inicia con: uvicorn src.artheon_sast.api.main:app --host 0.0.0.0 --port $PORT
+6. Expone en https://[tu-dominio].railway.app
+
+URLS DESPUES DEL DEPLOY
+=======================
+
+Health: https://[tu-dominio].railway.app/health
+Analyze: https://[tu-dominio].railway.app/api/v1/analyze
+Analyze Files: https://[tu-dominio].railway.app/api/v1/analyze-files
+Docs: https://[tu-dominio].railway.app/docs
+
+VARIABLES DE ENTORNO
+===================
+
+Automáticas:
+- PORT (asignada por Railway)
+- PYTHONUNBUFFERED=1
+
+Agregar más en Railway Dashboard si necesitas:
+- GEMINI_API_KEY (si lo integras)
+- Etc.
+
+VENTAJAS DE RAILWAY
+===================
+
+✓ Deployment automático desde GitHub
+✓ HTTPS gratis
+✓ Scaling automático
+✓ Logs en tiempo real
+✓ Métricas incluidas
+✓ $5/mes de crédito gratis (siempre)
+
+NOTA IMPORTANTE
+===============
+
+El Puerto es DINÁMICO en Railway. Por eso:
+- Dockerfile usa: ${PORT:-8000}
+- railway.json especifica: $PORT
+
+Esto permite que Railway asigne el puerto que quiera
+y la app responda correctamente.
+
+TAMAÑO DE LA IMAGEN
+==================
+
+Optimizado con:
+- Python 3.11-slim (~150MB)
+- .dockerignore excluye archivos innecesarios
+- Resultado: ~400-500MB imagen final
+
+Tiempo de deploy: 2-3 minutos
+
+PRÓXIMOS PASOS
+==============
+
+1. Ve a https://railway.app
+2. Conecta tu GitHub
+3. Selecciona este repositorio
+4. ¡Listo! Railway hace el resto automáticamente
+
+El proyecto está 100% listo. Solo necesitas conectar Railway.
